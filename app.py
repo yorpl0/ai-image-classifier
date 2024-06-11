@@ -6,13 +6,14 @@ import numpy as np
 
 model=load_model('v1.5.h5')
 def predict(fixed):
-    # Ensure the image has 3 dimensions (height, width, channels)
+    if fixed.ndim == 2:  # Grayscale image
+        fixed = np.stack((fixed,)*3, axis=-1)
+    elif fixed.ndim == 3 and fixed.shape[-1] == 4:  # RGBA image
+        fixed = fixed[..., :3]
+    
     resize = tf.image.resize(fixed, (256, 256))
-    # Expand dimensions to add batch size dimension
-    resize = tf.expand_dims(resize, axis=0)
-    # Normalize the image
-    resize = resize / 255.0
-    # Predict
+    resize = tf.expand_dims(resize, axis=0)  # Add batch dimension
+    resize = resize / 255.0  # Normalize the image
     yhat = model.predict(resize)
     return yhat[0][0]
 st.markdown(
