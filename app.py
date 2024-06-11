@@ -4,7 +4,7 @@ import tensorflow as tf
 from keras.api.models import load_model
 import numpy as np
 
-model=load_model('workingclassifier.h5')
+model=load_model('v1.5.h5')
 def predict(fixed):
     resize=tf.image.resize(fixed,(256,256))
     yhat = model.predict(np.expand_dims(resize/255, 0))
@@ -37,7 +37,7 @@ if uploaded_img is not None:
     st.write("Classifying...")
     #convert into arrays for opencv
     img = np.array(img)
-    prediction = predict(image)
+    prediction = predict(img)
     st.write(f'the probability that the image is real:{prediction}')
     
 
