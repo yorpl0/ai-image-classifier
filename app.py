@@ -6,10 +6,15 @@ import numpy as np
 
 model=load_model('v1.5.h5')
 def predict(fixed):
-    resize=tf.image.resize(fixed,(256,256))
-    yhat = model.predict(np.expand_dims(resize/255, 0))
+    # Ensure the image has 3 dimensions (height, width, channels)
+    resize = tf.image.resize(fixed, (256, 256))
+    # Expand dimensions to add batch size dimension
+    resize = tf.expand_dims(resize, axis=0)
+    # Normalize the image
+    resize = resize / 255.0
+    # Predict
+    yhat = model.predict(resize)
     return yhat[0][0]
-
 st.markdown(
     """
     <style>
@@ -28,18 +33,17 @@ st.markdown(
 
 st.markdown("<h1 class='centered-title'>Image Classification with TensorFlow</h1>", unsafe_allow_html=True)
 st.markdown("<h2 class='centered-text'>Upload your image for classification</h2>",unsafe_allow_html=True)
-uploaded_img=st.file_uploader("Upload here",type=["jpg","png","jpeg"])
+uploaded_img = st.file_uploader("Upload here", type=["jpg", "png", "jpeg"])
 if uploaded_img is not None:
     img = Image.open(uploaded_img)
-    #print the image
+    # Print the image
     st.image(img, caption='Uploaded Image.', use_column_width=True)
     st.write("")
     st.write("Classifying...")
-    #convert into arrays for opencv
+    # Convert into arrays for TensorFlow
     img = np.array(img)
     prediction = predict(img)
-    st.write(f'the probability that the image is real:{prediction}')
-    
+    st.write(f'The probability that the image is real: {prediction}')
 
 
 
