@@ -3,7 +3,6 @@ from PIL import Image
 import tensorflow as tf
 from keras.api.models import load_model
 import numpy as np
-from streamlit_lottie import st_lottie
 model=load_model('v1.5.h5')
 def predict(fixed):
     if fixed.ndim == 2:  # Grayscale image
@@ -51,8 +50,7 @@ if uploaded_img is not None:
     st.image(img, caption='Uploaded Image.', use_column_width=True)
     st.write("")
     st.write("Classifying...")
-    
-    st_lottie('loading.json',height=300,key='loading')
+
     # Convert into arrays for TensorFlow
     img = np.array(img)
     prediction = predict(img)
