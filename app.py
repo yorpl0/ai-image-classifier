@@ -1,7 +1,7 @@
 import streamlit as st
 from PIL import Image
 import tensorflow as tf
-from keras.api.models import load_model
+from tensorflow.keras.models import load_model
 import numpy as np
 
 # Load the model
